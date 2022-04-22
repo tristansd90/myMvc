@@ -1,5 +1,4 @@
 <?php
-
 // on cherche si $_GET possede la cle controller
 if(!empty($_GET['controller']))
 {
@@ -11,13 +10,12 @@ else
     // sinon assigner à la cle controller la valeur home
     $controller = 'home';
 }
+
 if(file_exists('../controller/'.$controller.'-controller.php'))
 {
     include_once '../controller/'.$controller.'-controller.php';
-
 }
-
-
+// add erreur
 
 if (!empty($_GET['action']))
 {
