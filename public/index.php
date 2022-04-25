@@ -1,39 +1,43 @@
 <?php
-// on cherche si $_GET possede la cle controller
-if(!empty($_GET['controller']))
+
+if (!empty($_GET['controller']))
 {
-    // assigner la valeur de la cle controller dans la variable $controller
     $controller = $_GET['controller'];
 }
 else
 {
-    // sinon assigner à la cle controller la valeur home
     $controller = 'home';
 }
 
-if(file_exists('../controller/'.$controller.'-controller.php'))
-{
-    include_once '../controller/'.$controller.'-controller.php';
+$controllerClassName = ucfirst($controller) . "Controller";
+
+if (file_exists('../controller/' . $controllerClassName . '.php'))
+{    
+    include_once '../controller/' . $controllerClassName . '.php';
+    $instance = new $controllerClassName();
 }
-// add erreur
+else
+{
+    include_once '../controller/ErrorController.php';
+    $instance = new ErrorController;
+    $instance->error404();
+}
 
 if (!empty($_GET['action']))
 {
-    // assigner la valeur de la cle controller dans la variable $controller
     $action = $_GET['action'];
 }
 else
 {
-    // sinon assigner à la cle controller la valeur home
     $action = 'index';
 }
 
-if (function_exists($action))
+if (method_exists($instance, $action))
 {
-    $action();
+    $instance->$action();
 }
 else
 {
-    include_once '../controller/error-controller.php';
-    error404();
+    include_once '../controller/ErrorController.php';
+    $error404 = new ErrorController;
 }
